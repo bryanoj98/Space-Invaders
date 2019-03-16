@@ -1,16 +1,20 @@
 //<![CDATA[
 window.onload=function(){
-var x=120;
-var y=120;
+var x=500;
+var y=10;
 var key,pos=0;
 var canvas=document.getElementById("canvas");
 var ctx=canvas.getContext("2d");
 var img=new Image();
+
 img.onload=function()
 {
   ctx.drawImage(img,x,y);
 }
-img.src="azu.png";
+img=document.getElementById("nave");
+img2=document.getElementById("alienI");
+
+//img.src="azu.png";
 document.onkeydown=function(e)
 {
   pos=1;
@@ -21,19 +25,22 @@ setInterval(function()
 {
   if(pos==0)return;
   if(key==37)x-=2;
-  if(key==38)y-=2;
+  //if(key==38)y-=2;
   if(key==39)x+=2;
-  if(key==40)y+=2;
+  //if(key==40)y+=2;
     canvas.width=canvas.width;
+//limites
+  if(x>=canvas.width-110)
+    x=canvas.width-110;
+  if(x<=0)
+      x=0;
+  /*if(y>=canvas.height-110)
+    y=canvas.height-110;
+  if(y<=10)
+      y=10;*/
   ctx.drawImage(img,x,y);
+  ctx.drawImage(img2,0,0);
+  
+  //ctx.drawImage(img,x,y,img.width/2.8, img.height*1.8);
 },5);
 }//]]>
-
-/*function myCanvas() {
-  var c = document.getElementById("imagen");
-  var ctx = c.getContext("2d");
-  var img = document.getElementById("alienI");
-  c.setAttribute("width","220");
-  c.setAttribute("height","220");
-  ctx.drawImage(img,0,0);
-}*/
