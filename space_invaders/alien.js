@@ -1,15 +1,16 @@
 var aliens=[];
+var naves=[];
 aliens.push(document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),
 document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'));
 
 window.onload=function(){
-var x=500,y=380,tx=550,ty=1;
+var x=500,y=380,tx=550,ty=1,x2=800;
 var key,pos=0;
 var canvas=document.getElementById("canvas");
 var ctx=canvas.getContext("2d");
 var img=new Image();
 var sentido=0,pum=0;
-
+var Nnaves=0;
 function pintar(){
   canvas.width=canvas.width;
   for (var i = 0; i < aliens.length; i++) {
@@ -26,15 +27,27 @@ function pintar(){
     ctx.lineWidth = 3;
     ctx.stroke();
   }
-  /*ctx.drawImage(img3,tx+90,ty);
-  ctx.drawImage(img2,tx,ty);*/
-  ctx.drawImage(img,x,y);
+  if(Nnaves!=0)
+    ctx.drawImage(naves[Nnaves-1],x,y)
+  /*for (var i = 0; i < naves.length; i++) {
+    ctx.drawImage(naves[i],x,y)
+  }*/
+  /*ctx.drawImage(img,x,y);
+  ctx.drawImage(nave2,x2,y);*/
+
 }
 /*img.onload=function()
 {
   ctx.drawImage(img,x,y);
 }*/
-img=document.getElementById("nave");
+naves.push(document.getElementById("nave"),document.getElementById("nave2"));
+$.get("Ngamers", function(data){
+    Nnaves=data;
+    //alert("#jugadores: " + data);
+  });
+/*img=document.getElementById("nave");
+nave2=document.getElementById("nave2");*/
+
 
 var myVar = setInterval(myTimer, 100);
 
@@ -61,6 +74,7 @@ document.onkeydown=function(e)
 {
   pos=1;
   key=window.event?e.keyCode:e.which;
+  document.getElementById('ultra').innerHTML = key;
 }
 document.onkeyup=function(e){pos=0;}
 setInterval(function()
@@ -72,8 +86,10 @@ setInterval(function()
   else if(key==32){
     pum=1;
   }
-
   //if(key==40)y+=2;
+  else if(key==65)x2-=2;
+  else if(key==68)x2+=2;
+
     //canvas.width=canvas.width;
 //limites
   if(x>=canvas.width-110)
