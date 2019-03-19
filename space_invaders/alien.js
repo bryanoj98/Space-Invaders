@@ -27,11 +27,18 @@ function pintar(){
     ctx.lineWidth = 3;
     ctx.stroke();
   }
-  if(Nnaves!=0)
-    ctx.drawImage(naves[Nnaves-1],x,y)
-  /*for (var i = 0; i < naves.length; i++) {
-    ctx.drawImage(naves[i],x,y)
-  }*/
+  // if(Nnaves!=0)
+  //   ctx.drawImage(naves[Nnaves-1],x,y);
+
+  for (var i = 0; i < naves.length; i++) {
+    if(i==(Nnaves-1))
+      ctx.drawImage(naves[i],x,y);
+    else
+    {
+      if(x2!=0)
+        ctx.drawImage(naves[i],x2,y);
+    }
+  }
   /*ctx.drawImage(img,x,y);
   ctx.drawImage(nave2,x2,y);*/
 
@@ -43,11 +50,21 @@ function pintar(){
 naves.push(document.getElementById("nave"),document.getElementById("nave2"));
 $.get("Ngamers", function(data){
     Nnaves=data;
-    //alert("#jugadores: " + data);
   });
 /*img=document.getElementById("nave");
 nave2=document.getElementById("nave2");*/
-
+var actualizar = setInterval(actu, 100);
+function actu() {
+  var n = x.toString();
+  n+="_"+Nnaves.toString();
+  $.post("Navexy",
+  {
+    xs: n
+  },
+  function(data){
+    x2=data;
+  });
+}
 
 var myVar = setInterval(myTimer, 100);
 
@@ -80,9 +97,32 @@ document.onkeyup=function(e){pos=0;}
 setInterval(function()
 {
   if(pos==0)return;
-  if(key==37)x-=2;
+  if(key==37)
+  {
+    x-=2;
+    // var n = x.toString();
+    // n+="_"+Nnaves.toString();
+    // $.post("Navexy",
+    // {
+    //   xs: n
+    // },
+    // function(data){
+    //   x2=data;
+    // });
+  }
   //if(key==38)y-=2;
-  else if(key==39)x+=2;
+  else if(key==39){
+    x+=2;
+    // var n = x.toString();
+    // n+="_"+Nnaves.toString();
+    // $.post("Navexy",
+    // {
+    //   xs: n
+    // },
+    // function(data){
+    //   x2=data;
+    // });
+  }
   else if(key==32){
     pum=1;
   }
