@@ -1,7 +1,12 @@
 var aliens=[];
 var naves=[];
-aliens.push(document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),
-document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'));
+
+var Valiens=[1,1,1,1,1,1,1,1,1,1,1,1];
+for (var i = 0; i < 12; i++) {
+  aliens.push(document.getElementById('alienI'));
+}
+// aliens.push(document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),
+// document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'),document.getElementById('alienI'));
 
 window.onload=function(){
 var x=500,y=380,tx=550,ty=1,x2=800;
@@ -11,6 +16,7 @@ var ctx=canvas.getContext("2d");
 var img=new Image();
 var sentido=0,pum=0;
 var Nnaves=0;
+
 function pintar(){
   canvas.width=canvas.width;
   for (var i = 0; i < aliens.length; i++) {
@@ -27,27 +33,30 @@ function pintar(){
     ctx.lineWidth = 3;
     ctx.stroke();
   }
-  // if(Nnaves!=0)
-  //   ctx.drawImage(naves[Nnaves-1],x,y);
-
-  for (var i = 0; i < naves.length; i++) {
-    if(i==(Nnaves-1))
-      ctx.drawImage(naves[i],x,y);
-    else
-    {
-      if(x2!=0)
-        ctx.drawImage(naves[i],x2,y);
+  if(Nnaves>2)
+  {
+    ctx.font = "100px Comic Sans MS";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    mensa="Espere su turno #"+Nnaves.toString();
+    ctx.fillText(mensa, canvas.width/2, canvas.height/2);
+    ctx.drawImage(naves[(Nnaves-1)],x,y);
+  }
+  else {
+    for (var i = 0; i < 2; i++) {
+      if(i==(Nnaves-1))
+        ctx.drawImage(naves[i],x,y);
+      else
+      {
+        if(x2!=0)
+          ctx.drawImage(naves[i],x2,y);
+      }
     }
   }
-  /*ctx.drawImage(img,x,y);
-  ctx.drawImage(nave2,x2,y);*/
+
 
 }
-/*img.onload=function()
-{
-  ctx.drawImage(img,x,y);
-}*/
-naves.push(document.getElementById("nave"),document.getElementById("nave2"));
+naves.push(document.getElementById("nave"),document.getElementById("nave2"),document.getElementById("nave3"));
 $.get("Ngamers", function(data){
     Nnaves=data;
   });
@@ -55,24 +64,55 @@ $.get("Ngamers", function(data){
 nave2=document.getElementById("nave2");*/
 var actualizar = setInterval(actu, 100);
 function actu() {
-  var n = x.toString();
-  n+="_"+Nnaves.toString();
-  $.post("Navexy",
+  if(Nnaves<=2)
   {
-    xs: n
-  },
-  function(data){
-    x2=data;
-  });
+    var n = x.toString();
+    n+="_"+Nnaves.toString();
+    $.post("Navexy",
+    {
+      xs: n
+    },
+    function(data){
+      x2=data;
+    });
+
+    var ayu=""
+    var envi=""
+    for (var i = 0; i < Valiens.length; i++)
+      envi+=Valiens[i];
+    envi+="_"+tx.toString()+"_"+sentido.toString()+"_"+Nnaves.toString();
+    $.post("Aliensxy",
+    {
+      wx: envi
+    },
+    function(data){
+      if(Nnaves>1)
+        tx=data;
+      ayu=data;
+    });
+  }
+  else {
+    var envi=Nnaves.toString();
+    $.post("Cola",
+    {
+      wx: envi
+    },
+    function(data){
+      Nnaves=data;
+    });
+  }
 }
 
-var myVar = setInterval(myTimer, 100);
+var myVar = setInterval(MoverAlient, 100);
 
-function myTimer() {
+function MoverAlient() {
+if(Nnaves==1|Nnaves>=3)
+{
   if(sentido==0)
     tx=tx+10;
   else
     tx=tx-10;
+}
   if(tx>=canvas.width-90)
   {
     tx=canvas.width-90;
@@ -100,28 +140,10 @@ setInterval(function()
   if(key==37)
   {
     x-=2;
-    // var n = x.toString();
-    // n+="_"+Nnaves.toString();
-    // $.post("Navexy",
-    // {
-    //   xs: n
-    // },
-    // function(data){
-    //   x2=data;
-    // });
   }
   //if(key==38)y-=2;
   else if(key==39){
     x+=2;
-    // var n = x.toString();
-    // n+="_"+Nnaves.toString();
-    // $.post("Navexy",
-    // {
-    //   xs: n
-    // },
-    // function(data){
-    //   x2=data;
-    // });
   }
   else if(key==32){
     pum=1;
@@ -134,8 +156,8 @@ setInterval(function()
 //limites
   if(x>=canvas.width-110)
     x=canvas.width-110;
-  else if(x<=0)
-      x=0;
+  else if(x<=1)
+      x=1;
   /*if(y>=canvas.height-110)
     y=canvas.height-110;
   if(y<=10)
